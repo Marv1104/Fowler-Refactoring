@@ -18,22 +18,48 @@ class Customer {
     }
 
     public String statement() {
-        double totalCharge = 0;
-        int frequentRenterPoints = 0;
         String result = "Rental Record for " + this.getName() + "\n";
         result += "\t" + "Title" + "\t" + "\t" + "Days" + "\t" + "Amount" + "\n";
 
         for (Rental rental : rentals) {
-            frequentRenterPoints += rental.getFrequentRenterPoints();
             //show figures for this rental
             result += "\t" + rental.getMovie().getTitle() + "\t" + "\t" + rental.getDaysRented() + "\t" + String.valueOf(rental.getCharge()) + "\n";
-            totalCharge += rental.getCharge();
         }
 
         //add footer lines
-        result += "Amount owed is " + String.valueOf(totalCharge) + "\n";
-        result += "You earned " + String.valueOf(frequentRenterPoints) + " frequent renter points";
+        result += "Amount owed is " + String.valueOf(getTotalCharge()) + "\n";
+        result += "You earned " + String.valueOf(getTotalFrequentRenterPoints()) + " frequent renter points";
         return result;
+    }
+
+    public String htmlStatement() {
+        String result = "<H1>Rental for <EM>" + getName() + "</EM></H1><P>\n";
+
+        for (Rental rental : rentals) {
+            //show figures for each rental
+            result += rental.getMovie().getTitle() + ": " + String.valueOf(rental.getCharge()) + "<BR>\n";
+        }
+
+        //add footer lines
+        result += "<P>Amount owed is <EM>" + String.valueOf(getTotalCharge()) + "</EM><P>\n";
+        result += "You earned <EM>" + String.valueOf(getTotalFrequentRenterPoints()) + "</EM> frequent renter points<P>";
+        return result;
+    }
+
+    private double getTotalCharge() {
+        double totalCharge = 0;
+        for (Rental rental : rentals) {
+            totalCharge += rental.getCharge();
+        }
+        return totalCharge;
+    }
+
+    private int getTotalFrequentRenterPoints() {
+        int totalFrequentRenterPoints = 0;
+        for (Rental rental : rentals) {
+            totalFrequentRenterPoints += rental.getFrequentRenterPoints();
+        }
+        return totalFrequentRenterPoints;
     }
 
 }
